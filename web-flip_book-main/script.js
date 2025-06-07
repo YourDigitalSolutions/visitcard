@@ -67,7 +67,7 @@ function adjustFlipBookZoom() {
 
   if (window.innerWidth <= 768) {
     flipBook.style.transformOrigin = "top center";
-    flipBook.style.transform = "scale(2)";
+    flipBook.style.transform = "scale(0.8)";
   } else {
     flipBook.style.transform = "none";
   }
