@@ -7,7 +7,7 @@ const responsiveWarning = document.getElementById("responsive-warning");
 const responsiveDesign = false;
 
 // Show mobile warning if the user is on mobile and responsive-design is false.
-if (!responsiveDesign && window.innerWidth <= 768) {
+if (!responsiveDesign) {
 	responsiveWarning.classList.add("show");
 }
 
