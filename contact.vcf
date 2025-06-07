@@ -1,0 +1,9 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Jean Dupont
+ORG:Exemple SARL
+TEL:+33612345678
+EMAIL:jean.dupont@example.com
+URL:https://www.monsiteexemple.com
+ADR:;;1 Rue de Paris;Paris;;75000;France
+END:VCARD
