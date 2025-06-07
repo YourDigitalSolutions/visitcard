@@ -3,77 +3,88 @@
 *********************/
 
 const responsiveWarning = document.getElementById("responsive-warning");
-const responsiveDesign = true; // <-- site responsive, pas de blocage.
+const responsiveDesign = true; // <-- ici on dit que le site est responsive, donc pas de blocage.
 
 if (!responsiveDesign && window.innerWidth <= 768 && responsiveWarning) {
   responsiveWarning.classList.add("show");
 }
 
+
 /***********************
 * MODE TOGGLE BEHAVIOR *
 ***********************/
 
+// Get elements that change with the mode.
 const toggleModeBtn = document.getElementById("toggle-mode-btn");
 const portfolioLink = document.getElementById("portfolio-link");
 const body = document.body;
 
-// Fonction pour appliquer le mode (light ou dark)
+// Function to apply mode.
 function applyMode(mode) {
   body.classList.remove("light-mode", "dark-mode");
   body.classList.add(mode);
 
-  if (toggleModeBtn) {
-    if (mode === "dark-mode") {
-      toggleModeBtn.style.color = "rgb(245, 245, 245)";
-      toggleModeBtn.innerHTML = '<i class="bi bi-sun-fill"></i>';
-    } else {
-      toggleModeBtn.style.color = "rgb(2, 4, 8)";
-      toggleModeBtn.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
-    }
-  }
+  if (mode === "dark-mode") {
+    // Set dark mode styles.
+    toggleModeBtn.style.color = "rgb(245, 245, 245)";
+    toggleModeBtn.innerHTML = '<i class="bi bi-sun-fill"></i>';
 
-  if (portfolioLink) {
-    portfolioLink.style.color = mode === "dark-mode" ? "rgb(245, 245, 245)" : "rgb(2, 4, 8)";
-  }
+    if (portfolioLink) portfolioLink.style.color = "rgb(245, 245, 245)";
 
-  if (responsiveWarning) {
-    responsiveWarning.style.backgroundColor = mode === "dark-mode" ? "rgb(2, 4, 8)" : "rgb(245, 245, 245)";
+    if (responsiveWarning) responsiveWarning.style.backgroundColor = "rgb(2, 4, 8)";
+  } else {
+    // Set light mode styles.
+    toggleModeBtn.style.color = "rgb(2, 4, 8)";
+    toggleModeBtn.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+
+    if (portfolioLink) portfolioLink.style.color = "rgb(2, 4, 8)";
+
+    if (responsiveWarning) responsiveWarning.style.backgroundColor = "rgb(245, 245, 245)";
   }
 }
 
-// Récupère le mode sauvegardé, ou mode par défaut
+// Check and apply saved mode on page load
 let savedMode = localStorage.getItem("mode");
+
 if (savedMode === null) {
-  savedMode = "light-mode";
+  savedMode = "light-mode"; // Default mode.
 }
 applyMode(savedMode);
 
-// Ajout écouteur pour le bouton toggle mode
-if (toggleModeBtn) {
-  toggleModeBtn.addEventListener("click", function () {
-    let newMode = body.classList.contains("light-mode") ? "dark-mode" : "light-mode";
-    applyMode(newMode);
-    localStorage.setItem("mode", newMode);
-  });
-}
+// Toggle mode and save preference.
+toggleModeBtn.addEventListener("click", function () {
+  let newMode;
 
-/**************************************
-* ADAPTER LE FLIP BOOK POUR MOBILE *
-**************************************/
+  if (body.classList.contains("light-mode")) {
+    newMode = "dark-mode";
+  } else {
+    newMode = "light-mode";
+  }
 
+  applyMode(newMode);
+
+  // Save choice.
+  localStorage.setItem("mode", newMode);
+});
+
+
+/*****************************
+* FLIP BOOK ZOOM + POSITION *
+*****************************/
+
+// Adjust flip book zoom and horizontal position on resize and load
 function adjustFlipBookZoom() {
   const flipBook = document.getElementById("flip_book");
   if (!flipBook) return;
 
   if (window.innerWidth <= 768) {
     flipBook.style.transformOrigin = "top center";
-    flipBook.style.transform = "scale(0.7)";
+    flipBook.style.transform = "scale(0.7) translateX(30%)";
   } else {
     flipBook.style.transform = "none";
   }
 }
 
-// Appliquer au chargement
+// Run on load and when resizing window
 window.addEventListener("load", adjustFlipBookZoom);
-// Appliquer au redimensionnement
 window.addEventListener("resize", adjustFlipBookZoom);
