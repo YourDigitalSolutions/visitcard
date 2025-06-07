@@ -3,88 +3,84 @@
 *********************/
 
 const responsiveWarning = document.getElementById("responsive-warning");
-const responsiveDesign = true; // <-- ici on dit que le site est responsive, donc pas de blocage.
+const responsiveDesign = true;
 
 if (!responsiveDesign && window.innerWidth <= 768 && responsiveWarning) {
   responsiveWarning.classList.add("show");
 }
 
-
 /***********************
 * MODE TOGGLE BEHAVIOR *
 ***********************/
 
-// Get elements that change with the mode.
 const toggleModeBtn = document.getElementById("toggle-mode-btn");
 const portfolioLink = document.getElementById("portfolio-link");
 const body = document.body;
 
-// Function to apply mode.
 function applyMode(mode) {
   body.classList.remove("light-mode", "dark-mode");
   body.classList.add(mode);
 
   if (mode === "dark-mode") {
-    // Set dark mode styles.
     toggleModeBtn.style.color = "rgb(245, 245, 245)";
     toggleModeBtn.innerHTML = '<i class="bi bi-sun-fill"></i>';
-
     if (portfolioLink) portfolioLink.style.color = "rgb(245, 245, 245)";
-
     if (responsiveWarning) responsiveWarning.style.backgroundColor = "rgb(2, 4, 8)";
   } else {
-    // Set light mode styles.
     toggleModeBtn.style.color = "rgb(2, 4, 8)";
     toggleModeBtn.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
-
     if (portfolioLink) portfolioLink.style.color = "rgb(2, 4, 8)";
-
     if (responsiveWarning) responsiveWarning.style.backgroundColor = "rgb(245, 245, 245)";
   }
 }
 
-// Check and apply saved mode on page load
-let savedMode = localStorage.getItem("mode");
-
-if (savedMode === null) {
-  savedMode = "light-mode"; // Default mode.
-}
+let savedMode = localStorage.getItem("mode") || "light-mode";
 applyMode(savedMode);
 
-// Toggle mode and save preference.
-toggleModeBtn.addEventListener("click", function () {
-  let newMode;
-
-  if (body.classList.contains("light-mode")) {
-    newMode = "dark-mode";
-  } else {
-    newMode = "light-mode";
-  }
-
+toggleModeBtn.addEventListener("click", () => {
+  const newMode = body.classList.contains("light-mode") ? "dark-mode" : "light-mode";
   applyMode(newMode);
-
-  // Save choice.
   localStorage.setItem("mode", newMode);
 });
-
 
 /*****************************
 * FLIP BOOK ZOOM + POSITION *
 *****************************/
 
-// Adjust flip book zoom and horizontal position on resize and load
-function adjustFlipBookZoom() {
+// Fonction pour créer un wrapper autour de #flip_book si pas déjà existant
+function ensureFlipBookWrapper() {
   const flipBook = document.getElementById("flip_book");
-  if (!flipBook) return;
+  if (!flipBook) return null;
+
+  let wrapper = document.getElementById("flip_book_wrapper");
+  if (!wrapper) {
+    wrapper = document.createElement("div");
+    wrapper.id = "flip_book_wrapper";
+
+    // Styles pour éviter bugs clics, GPU, transition fluide
+    wrapper.style.transition = "transform 0.3s ease";
+    wrapper.style.transformOrigin = "top center";
+    wrapper.style.willChange = "transform";
+    wrapper.style.position = "relative";
+    wrapper.style.zIndex = "1";
+
+    // Mettre #flip_book dans le wrapper
+    flipBook.parentNode.insertBefore(wrapper, flipBook);
+    wrapper.appendChild(flipBook);
+  }
+  return wrapper;
+}
+
+function adjustFlipBookZoom() {
+  const wrapper = ensureFlipBookWrapper();
+  if (!wrapper) return;
 
   if (window.innerWidth <= 768) {
-    flipBook.style.transformOrigin = "top center";
-    flipBook.style.transform = "scale(0.7) translateX(30%)";
+    wrapper.style.transform = "scale(0.7) translateX(30%)";
   } else {
-    flipBook.style.transform = "none";
+    wrapper.style.transform = "none";
   }
 }
 
-// Run on load and when resizing window
 window.addEventListener("load", adjustFlipBookZoom);
 window.addEventListener("resize", adjustFlipBookZoom);
