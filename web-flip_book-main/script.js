@@ -59,12 +59,12 @@ function adjustFlipBookZoom() {
   if (!flipBook) return;
 
   if (window.innerWidth <= 768) {
-    flipBook.style.transformOrigin = "top left";
+    flipBook.style.transformOrigin = "top rigth";
     flipBook.style.transform = "scale(0.6)";
-    flipBook.style.marginRigth = "100px"; // Décale un peu vers la droite
+    flipBook.style.marginRight = "100px"; // Décale un peu vers la droite
   } else {
     flipBook.style.transform = "none";
-    flipBook.style.marginLeft = "auto";
+    flipBook.style.marginRight = "auto";
   }
 }
 
