@@ -44,11 +44,10 @@ toggleModeBtn.addEventListener("click", () => {
 });
 
 /*****************************
-* FLIP BOOK ZOOM + POSITION *
+* FLIP BOOK ZOOM MOBILE ONLY *
 *****************************/
 
-// Fonction pour créer un wrapper autour de #flip_book si pas déjà existant
-function ensureFlipBookWrapper() {
+function wrapFlipBook() {
   const flipBook = document.getElementById("flip_book");
   if (!flipBook) return null;
 
@@ -56,31 +55,29 @@ function ensureFlipBookWrapper() {
   if (!wrapper) {
     wrapper = document.createElement("div");
     wrapper.id = "flip_book_wrapper";
-
-    // Styles pour éviter bugs clics, GPU, transition fluide
+    wrapper.style.display = "flex";
+    wrapper.style.justifyContent = "center";
+    wrapper.style.alignItems = "center";
+    wrapper.style.width = "100%";
+    wrapper.style.overflow = "hidden";
     wrapper.style.transition = "transform 0.3s ease";
-    wrapper.style.transformOrigin = "top center";
-    wrapper.style.willChange = "transform";
-    wrapper.style.position = "relative";
-    wrapper.style.zIndex = "1";
 
-    // Mettre #flip_book dans le wrapper
     flipBook.parentNode.insertBefore(wrapper, flipBook);
     wrapper.appendChild(flipBook);
   }
   return wrapper;
 }
 
-function adjustFlipBookZoom() {
-  const wrapper = ensureFlipBookWrapper();
+function updateFlipBookZoom() {
+  const wrapper = wrapFlipBook();
   if (!wrapper) return;
 
   if (window.innerWidth <= 768) {
-    wrapper.style.transform = "scale(0.7) translateX(30%)";
+    wrapper.style.transform = "scale(0.7)";
   } else {
-    wrapper.style.transform = "none";
+    wrapper.style.transform = "scale(1)";
   }
 }
 
-window.addEventListener("load", adjustFlipBookZoom);
-window.addEventListener("resize", adjustFlipBookZoom);
+window.addEventListener("load", updateFlipBookZoom);
+window.addEventListener("resize", updateFlipBookZoom);
