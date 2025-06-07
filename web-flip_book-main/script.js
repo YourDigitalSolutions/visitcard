@@ -60,8 +60,8 @@ function adjustFlipBookZoom() {
 
   if (window.innerWidth <= 768) {
     flipBook.style.transformOrigin = "top right";
-    flipBook.style.transform = "scale(0.1)";
-    flipBook.style.marginRight = "-10px"; // Décale un peu vers la droite
+    flipBook.style.transform = "scale(0.6)";
+    flipBook.style.marginRight = "10px"; // Décale un peu vers la droite
   } else {
     flipBook.style.transform = "none";
     flipBook.style.marginRight = "auto";
