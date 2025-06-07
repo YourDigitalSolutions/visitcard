@@ -70,3 +70,32 @@ function adjustFlipBookZoom() {
 
 window.addEventListener("load", adjustFlipBookZoom);
 window.addEventListener("resize", adjustFlipBookZoom);
+
+/******************************************
+* AJOUTER UNE PHRASE SOUS LE FLIP BOOK *
+******************************************/
+
+window.addEventListener("DOMContentLoaded", () => {
+  const flipBook = document.getElementById("flip_book");
+  if (!flipBook) return;
+
+  const existingText = document.getElementById("mobile-story-text");
+  if (existingText) return; // éviter doublons
+
+  const text = document.createElement("p");
+  text.id = "mobile-story-text";
+  text.textContent = "L'histoire de Your Digital Solutions";
+
+  // Style du texte
+  text.style.textAlign = "center";
+  text.style.fontSize = "1.2rem";
+  text.style.fontWeight = "600";
+  text.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+  text.style.marginTop = "20px";
+  text.style.marginLeft = "20px";
+  text.style.marginRight = "20px";
+  text.style.color = "#222";
+
+  // Insérer juste après le flip book
+  flipBook.insertAdjacentElement('afterend', text);
+});
