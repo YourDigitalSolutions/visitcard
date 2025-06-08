@@ -405,9 +405,9 @@
         </script> 
 
 
-  <!-- BOUTON DE PARTAGE AVEC ESPACE RÉDUIT -->
+ <!-- BOUTON DE PARTAGE AVEC ESPACE RÉDUIT -->
 <div class="flex justify-center mt-0">
-  <button class="button_share">
+  <button class="button_share" id="btnShare">
     <p class="button__text_share" style="--letters-count: 18;">
       <span style="--index: 0;">P</span>
       <span style="--index: 1;">A</span>
@@ -452,6 +452,26 @@
   </button>
 </div>
 
+<script>
+  const btnShare = document.getElementById('btnShare');
+
+  btnShare.addEventListener('click', async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          text: 'Regarde ce super site !',
+          url: window.location.href,
+        });
+        console.log('Partage réussi');
+      } catch (error) {
+        console.error('Erreur lors du partage:', error);
+      }
+    } else {
+      alert('Le partage n’est pas supporté sur ce navigateur.');
+    }
+  });
+</script>
 
 
   </div>
