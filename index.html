@@ -3,9 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Carte simplifiée</title>
+  <title>Ma Carte NFC avec Vanta Net</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+
+ /* From Uiverse.io by MikeeMikee */ 
+ .button_share{
+  cursor: pointer;
+  border: none;
+  background: #00ccff;
+  color: #fff;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  place-content: center;
+  transition:
+    background 300ms,
+    transform 200ms;
+  font-weight: 600;
+}
+
+.container {
+  text-align: center;
+}
+
+.button__text_share {
+  --letters-count: 18; /* nombre total de lettres */
+  position: absolute;
+  inset: -15px;
+  animation: text-rotation 8s linear infinite;
+}
+
+.button__text_share > span {
+  position: absolute;
+  inset: 15%;
+  /* angle dynamique selon le nombre de lettres */
+  transform: rotate(calc((360deg / var(--letters-count)) * var(--index)));
+}
+
+.button__circle_share {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  background: #212121;
+  color: #00ccff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button__icon_share--copy {
+  position: absolute;
+  transform: translate(-150%, 150%);
+}
+
+.button_share:hover {
+  background: #000;
+  transform: scale(1.05);
+}
+
+.button_share:hover .button__icon_share {
+  color: #fff;
+}
+
+.button_share:hover .button__icon_share:first-child {
+  transition: transform 0.3s ease-in-out;
+  transform: translate(150%, -150%);
+}
+
+.button_share:hover .button__icon_share--copy {
+  transition: transform 0.3s ease-in-out 0.1s;
+  transform: translate(0);
+}
+
+@keyframes text-rotation {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.button_share:active {
+  transform: scale(0.95);
+}
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      /*overflow: hidden;*/
+    }
+
+    #vanta-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+    }
+
     body {
       background: #0d1e30;
       color: #333;
@@ -14,76 +111,80 @@
       justify-content: center;
       min-height: 100vh;
       padding: 20px;
-      margin: 0;
     }
+
     .card {
       background: white;
       color: #333;
       border-radius: 20px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-      padding: 20px;
-      max-width: min(400px, 100%);
+      padding: 0 0 16px;
+      text-align: center;
+      max-width: 400px;
       width: 100%;
-      display: flex;
-      flex-direction: column; /* colonne pour empiler contenu + réseaux */
-      align-items: center;
-      gap: 20px;
-      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
-    /* Ligne photo + contenu */
-    .top-row {
+
+    .top-banner {
+      position: relative;
       width: 100%;
+      height: 100px;
+      background: url('https://images.unsplash.com/photo-1503264116251-35a269479413?fit=crop&w=800&q=80') center/cover no-repeat;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
       display: flex;
-      gap: 20px;
       align-items: center;
-    }
-    .photo-wrapper {
-      flex-shrink: 0;
-      display: flex;
       justify-content: center;
-      width: 140px;
+      z-index: 1;
+      overflow: hidden;
     }
+
+    .top-banner img.logo {
+      height: 40px;
+      z-index: 2;
+      position: relative;
+    }
+
     .avatar {
       width: 120px;
       height: 120px;
       object-fit: cover;
       border-radius: 50%;
       border: 4px solid white;
+      margin: -20px auto 12px;
       background: #eee;
+      display: block;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transition: transform 0.3s ease;
-      cursor: pointer;
+      position: relative;
+      z-index: 10;
     }
+
     .avatar:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
-    .content {
-      flex: 1;
-      text-align: left;
-    }
-    .logo {
-      height: 40px;
-      margin-bottom: 16px;
-      display: block;
-    }
+
     h1 {
       font-size: 1.6rem;
       margin-bottom: 6px;
     }
+
     p {
-      margin: 0;
+      margin: 0 0 16px;
       color: #666;
     }
-    /* Réseaux sociaux centrés sur toute la carte */
+
     .social-icons {
-      width: 100%;
+      margin-top: 20px;
       display: flex;
       justify-content: center;
-      gap: 12px;
+      gap: 16px;
     }
+
     .social-icons a {
-      width: 36px;
-      height: 36px;
+      width: 50px;
+      height: 50px;
       border-radius: 10px;
       overflow: hidden;
       display: flex;
@@ -92,260 +193,313 @@
       background: #f5f5f5;
       transition: background 0.3s ease;
     }
+
     .social-icons a:hover {
       background: #e0e0e0;
     }
+
     .social-icons img {
-      width: 60%;
-      height: 60%;
-      object-fit: contain;
-      filter: grayscale(100%);
-      transition: filter 0.3s ease;
-    }
-    .social-icons a:hover img {
-      filter: grayscale(0%);
-    }
-    /* Boutons partagés */
-    .flex.flex-row.gap-4.justify-center.w-full {
-      width: 105%;
-    }
-    .flex.flex-row.gap-4.justify-center.w-full a {
-      flex-shrink: 1;
-      min-width: 120px;
-      padding: 10px 16px;
-      font-size: 0.875rem;
-      white-space: nowrap;
-      box-sizing: border-box;
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
+
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.social-icons a:hover img {
+  filter: grayscale(0%);
+}
+
+    @media (max-width: 400px) {
+      .social-icons {
+        gap: 12px;
+      }
     }
 
-    /* Responsive: bascule en colonne et centre tout */
-    @media (max-width: 400px) {
-      .top-row {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .content {
-        text-align: center;
-      }
-      .avatar {
-        width: 90px;
-        height: 90px;
-      }
-      .social-icons {
-        gap: 8px;
-      }
-      .social-icons a {
-        width: 30px;
-        height: 30px;
-      }
-      .social-icons img {
-        width: 70%;
-        height: 70%;
-      }
-      .flex.flex-row.gap-4.justify-center.w-full {
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
-      }
-      .flex.flex-row.gap-4.justify-center.w-full a {
-        width: 100%;
-        min-width: unset;
-        padding: 8px 12px;
-        font-size: 0.75rem;
-      }.flex.flex-row.gap-4.justify-center.w-full {
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-  justify-content: center; /* bien centrer la colonne */
-  width: 100%;
-}
-.flex.flex-row.gap-4.justify-center.w-full a {
-  width: 100%;
-  max-width: 280px; /* limite largeur max des boutons */
-  min-width: unset;
-  padding: 8px 12px;
-  font-size: 0.75rem;
-  text-align: center; /* centre le texte et icône */
-  display: flex;
-  justify-content: center; /* centre horizontalement contenu des boutons */
-  align-items: center;
-}
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0d1e30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      color: white;
+      transition: opacity 1s ease;
     }
+
+    #loader img {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+
+    
   </style>
 </head>
 <body>
 
+  <div id="loader">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo" />
+    <p>Entrez dans une nouvelle ère digitale...</p>
+  </div>
+
+  <div id="vanta-bg"></div>
+
   <div class="card">
-    <div class="top-row">
-      <div class="photo-wrapper">
-        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Photo de profil" class="avatar" />
-      </div>
-      <div class="content">
-        <img src="Logo_Y_blank.png" alt="Logo" class="logo" />
-        <h1>Jordan KRIEF</h1>
-        <p>CEO</p>
+    <!-- BOUTON DE PARTAGE AVEC ESPACE RÉDUIT 
+    <div class="top-banner">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo" class="logo" />
+    </div>-->
+
+    <div class="profile-row flex items-center gap-4 px-6 mt-6" style="margin-top: 30px;">
+      <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Photo de profil" class="avatar" />
+      <div class="profile-text text-left" style="display: flex; flex-direction: column; justify-content: center;">
+        <img src="Logo_Y_blank.png" alt="Logo" style="width: 15%; height: auto; margin-bottom: 8px; display: block;" />
+        <h1>Jean Dupont</h1>
+        <p>Fondateur de Exemple SARL</p>
       </div>
     </div>
+    
 
-    <div class="social-icons">
-      <a href="https://instagram.com/tonprofil" target="_blank" rel="noopener" aria-label="Instagram">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" />
-      </a>
-      <a href="https://linkedin.com/in/tonprofil" target="_blank" rel="noopener" aria-label="LinkedIn">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" />
-      </a>
-      <a href="https://youtube.com/chaine" target="_blank" rel="noopener" aria-label="YouTube">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" />
-      </a>
-      <a href="https://tiktok.com/@tonprofil" target="_blank" rel="noopener" aria-label="TikTok">
-        <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok" />
-      </a>
-    </div>
-
-    <!-- contact + rdv -->
-    <div class="flex flex-row gap-4 justify-center w-full">
-      <a href="contact.vcf" download
-        class="flex items-center gap-2 px-4 py-2 border-2 rounded-full bg-gray-50 text-gray-800 font-semibold shadow-xl
-               text-xs
-               relative overflow-hidden group border-gray-50
-               before:absolute before:w-full before:transition-all before:duration-700
-               before:hover:w-full before:-left-full before:hover:left-0
-               before:rounded-full before:bg-emerald-500
-               hover:text-gray-50 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 z-10">
+    <div class="flex flex-row gap-4 px-6 mt-6 justify-center" style="margin-top: 0px;">
+      <a href="contact.vcf" download class="flex justify-center gap-2 items-center mx-auto shadow-xl text-sm bg-gray-50 backdrop-blur-md font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-emerald-500 hover:text-gray-50 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-4 py-2 overflow-hidden border-2 rounded-full group">
         📇 Ajouter en contact
-        <svg class="w-5 h-5 rotate-45 p-1 border border-gray-700 rounded-full group-hover:bg-gray-50 group-hover:border-none group-hover:rotate-90 transition-all duration-300 ease-linear" viewBox="0 0 16 19" xmlns="http://www.w3.org/2000/svg" >
+        <svg class="w-5 h-5 group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-gray-700 group-hover:border-none p-1 rotate-45" viewBox="0 0 16 19" xmlns="http://www.w3.org/2000/svg">
           <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" class="fill-gray-800 group-hover:fill-gray-800"></path>
         </svg>
       </a>
-    
-      <a href="https://calendly.com/exemple/rdv" target="_blank" rel="noopener"
-        class="flex items-center gap-2 px-4 py-2 border-2 rounded-full bg-gray-50 text-gray-800 font-semibold shadow-xl
-               text-xs
-               relative overflow-hidden group border-gray-50
-               before:absolute before:w-full before:transition-all before:duration-700
-               before:hover:w-full before:-left-full before:hover:left-0
-               before:rounded-full before:bg-emerald-500
-               hover:text-gray-50 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 z-10">
+      <a href="https://calendly.com/exemple/rdv" target="_blank" rel="noopener" class="flex justify-center gap-2 items-center mx-auto shadow-xl text-sm bg-gray-50 backdrop-blur-md font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-emerald-500 hover:text-gray-50 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-4 py-2 overflow-hidden border-2 rounded-full group">
         📅 Prendre un RDV
       </a>
+
+     
+
     </div>
 
-      <!-- Encadré responsive -->
-<div style="max-width: 100%; width: 100%; margin: 10px auto; padding: 24px; border: 1px solid #ccc; border-radius: 12px; background-color: #f9f9f9; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-  <div id="map" style="width: 100%; height: 300px; border-radius: 8px;"></div>
+  
+
+
+<!-- button batman 
+    <div class="custom-button" role="button" tabindex="0" style="
+  border: none;
+  position: relative;
+  width: 200px;
+  height: 73px;
+  padding: 0;
+  z-index: 2;
+  -webkit-mask: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 height=%27868%27 width=%272500%27 viewBox=%270 0 726 252.17%27%3E%3Cpath d=%27M483.92 0S481.38 24.71 466 40.11c-11.74 11.74-24.09 12.66-40.26 15.07-9.42 1.41-29.7 3.77-34.81-.79-2.37-2.11-3-21-3.22-27.62-.21-6.92-1.36-16.52-2.82-18-.75 3.06-2.49 11.53-3.09 13.61S378.49 34.3 378 36a85.13 85.13 0 0 0-30.09 0c-.46-1.67-3.17-11.48-3.77-13.56s-2.34-10.55-3.09-13.61c-1.45 1.45-2.61 11.05-2.82 18-.21 6.67-.84 25.51-3.22 27.62-5.11 4.56-25.38 2.2-34.8.79-16.16-2.47-28.51-3.39-40.21-15.13C244.57 24.71 242 0 242 0H0s69.52 22.74 97.52 68.59c16.56 27.11 14.14 58.49 9.92 74.73C170 140 221.46 140 273 158.57c69.23 24.93 83.2 76.19 90 93.6 6.77-17.41 20.75-68.67 90-93.6 51.54-18.56 103-18.59 165.56-15.25-4.21-16.24-6.63-47.62 9.93-74.73C656.43 22.74 726 0 726 0z%27/%3E%3C/svg%3E') no-repeat 50% 50%;
+  mask: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 height=%27868%27 width=%272500%27 viewBox=%270 0 726 252.17%27%3E%3Cpath d=%27M483.92 0S481.38 24.71 466 40.11c-11.74 11.74-24.09 12.66-40.26 15.07-9.42 1.41-29.7 3.77-34.81-.79-2.37-2.11-3-21-3.22-27.62-.21-6.92-1.36-16.52-2.82-18-.75 3.06-2.49 11.53-3.09 13.61S378.49 34.3 378 36a85.13 85.13 0 0 0-30.09 0c-.46-1.67-3.17-11.48-3.77-13.56s-2.34-10.55-3.09-13.61c-1.45 1.45-2.61 11.05-2.82 18-.21 6.67-.84 25.51-3.22 27.62-5.11 4.56-25.38 2.2-34.8.79-16.16-2.47-28.51-3.39-40.21-15.13C244.57 24.71 242 0 242 0H0s69.52 22.74 97.52 68.59c16.56 27.11 14.14 58.49 9.92 74.73C170 140 221.46 140 273 158.57c69.23 24.93 83.2 76.19 90 93.6 6.77-17.41 20.75-68.67 90-93.6 51.54-18.56 103-18.59 165.56-15.25-4.21-16.24-6.63-47.62 9.93-74.73C656.43 22.74 726 0 726 0z%27/%3E%3C/svg%3E') no-repeat 50% 50%;
+  -webkit-mask-size: 100%;
+  cursor: pointer;
+  background-color: transparent;
+  transform: translateY(8px);
+  " 
+  onkeydown="if(event.key==='Enter' || event.key===' ') { this.click(); }"
+>
+  <span style="
+    position: absolute;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 100;
+    left: 50%;
+    top: 39%;
+    letter-spacing: 3px;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    color: black;
+    transition: all 2s ease;
+  " class="button-text">Mon bouton</span>
+
+  <style>
+    .custom-button::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      box-shadow: 0px 0 0 0 white;
+      transition: all 2s ease;
+      pointer-events: none;
+    }
+    .custom-button:hover::after {
+      box-shadow: 0px -13px 56px 12px #ffffffa6;
+    }
+    .custom-button:hover .button-text {
+      color: white;
+    }
+    .custom-button::before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 100%;
+      background-color: black;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 1s ease;
+      pointer-events: none;
+    }
+    .custom-button:hover::before {
+      width: 100%;
+    }
+  </style>
 </div>
 
-<!-- Leaflet CSS/JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+-->
 
-<!-- SCRIPT DE LA MAP -->
-<script>
-  const map = L.map('map').setView([48.8566, 2.3522], 15); // Paris
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors & CartoDB'
-  }).addTo(map);
-  L.marker([48.8566, 2.3522]).addTo(map).bindPopup('Your Digital Solutions<br>14, rue Charles V<br>75004 PARIS').openPopup();
-</script>
+    
+    
     
 
+      <div class="flex justify-center mt-6" style="margin-top: 20px;">
+        <button onclick="window.open('web-flip_book-main/index.html', '_blank')" class="relative h-[50px] px-[30px] border-[2px] border-black bg-[#e8e8e8] select-none whitespace-nowrap transition-all duration-75 font-sans hover:cursor-crosshair active:scale-95 before:content-[''] before:absolute before:bg-[#e8e8e8] before:transition-all before:duration-200 before:w-[calc(100%+6px)] before:h-[calc(100%-16px)] before:top-[8px] before:left-[-3px] hover:before:top-[16px] hover:before:h-[calc(100%-32px)] after:content-[''] after:absolute after:bg-[#e8e8e8] after:transition-all after:duration-200 after:w-[calc(100%-16px)] after:h-[calc(100%+6px)] after:top-[-3px] after:left-[8px] hover:after:left-[16px] hover:after:w-[calc(100%-32px)]">
+          <span class="relative z-[3] text-[15px] font-semibold">Découvrir Notre Histoire</span>
+        </button>
+      </div>
 
-    <!-- partager -->
-    <button aria-label="Partager" style="
-    cursor: pointer;
-    border: none;
-    background: #00ccff;
-    color: #fff;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-    display: grid;
-    place-content: center;
-    transition: background 300ms, transform 200ms;
-    font-weight: 600;"
-    onmouseover="this.style.background='#000'; this.style.transform='scale(1.05)';
-                 this.querySelector('.button__icon_share.share').style.transform='translate(150%, -150%)';
-                 this.querySelector('.button__icon_share.share').style.transition='transform 0.3s ease-in-out';
-                 this.querySelector('.button__icon_share.checked').style.transform='translate(0)';
-                 this.querySelector('.button__icon_share.checked').style.transition='transform 0.3s ease-in-out 0.1s';"
-    onmouseout="this.style.background='#00ccff'; this.style.transform='scale(1)';
-                this.querySelector('.button__icon_share.share').style.transform='translate(0)';
-                this.querySelector('.button__icon_share.share').style.transition='none';
-                this.querySelector('.button__icon_share.checked').style.transform='translate(-150%, 150%)';
-                this.querySelector('.button__icon_share.checked').style.transition='none';"
-    onmousedown="this.style.transform='scale(0.95)';"
-    onmouseup="this.style.transform='scale(1.05)';"
-  >
-    <!-- Texte tournant -->
-    <div class="button__text_share" style="
-      --letters-count: 19;
-      position: absolute;
-      inset: -15px;
-      animation: text-rotation 8s linear infinite;
-      display: block;">
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 0));">P</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 1));">A</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 2));">R</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 3));">T</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 4));">A</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 5));">G</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 6));">E</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 7));">R</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 8));"> </span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 9));">C</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 10));">E</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 11));"> </span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 12));">P</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 13));">R</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 14));">O</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 15));">F</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 16));">I</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 17));">L</span>
-      <span style="position:absolute; inset:15%; transform: rotate(calc((360deg / 19) * 18));"> </span>
-    </div>
-  
-    <!-- Cercle intérieur contenant les icônes -->
-    <div class="button__circle_share" style="
-      position: relative;
-      width: 40px;
-      height: 40px;
-      overflow: hidden;
-      background: #212121;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;">
-  
-      <!-- Icône Partager (visible par défaut) -->
-      <svg class="button__icon_share share" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-           style="position: absolute; transform: translate(0); color:#00ccff;">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+
+      <!-- BOUTON 2 -->
+      <div style="margin-top: 15px;">
+        <button class="learn-more group relative inline-block w-56" style="cursor: pointer; font-family: inherit; font-size: inherit;">
+          <span class="circle block w-12 h-12 bg-[#282936] rounded-full relative transition-all duration-[450ms] ease-[cubic-bezier(0.65,0,0.076,1)] group-hover:w-full"></span>
+          <span class="icon arrow absolute top-1/2 left-[10px] -translate-y-1/2 w-[18px] h-[2px] bg-none transition-all duration-[450ms] ease-[cubic-bezier(0.65,0,0.076,1)] group-hover:bg-white group-hover:translate-x-4">
+            <span class="absolute top-[-4.6px] right-[1px] w-[10px] h-[10px] border-t-2 border-r-2 border-white rotate-45 content-['']"></span>
+          </span>
+          <span class="button-text absolute inset-0 px-0 py-3 ml-[2.85rem] text-[#282936] font-bold text-center uppercase leading-6 transition-all duration-[450ms] ease-[cubic-bezier(0.65,0,0.076,1)] group-hover:text-white" style="white-space: nowrap;">
+            Visiter notre SITE
+          </span>
+        </button>
+        </div>
+
+        <div class="social-icons" style="margin-top: 15px;">
+          <a href="https://instagram.com/tonprofil" target="_blank" rel="noopener"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram" /></a>
+          <a href="https://linkedin.com/in/tonprofil" target="_blank" rel="noopener"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" /></a>
+          <a href="https://youtube.com/tonprofil" target="_blank" rel="noopener"><img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="YouTube" /></a>
+          <a href="https://tiktok.com/@tonprofil" target="_blank" rel="noopener"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046123.png" alt="TikTok" /></a>
+        
+          
+        
+        </div>
+
+       
+        <!-- Encadré avec plus d’espace intérieur et extérieur -->
+        <div style="max-width: 360px; margin: 10px auto; padding: 24px; border: 1px solid #ccc; border-radius: 12px; background-color: #f9f9f9; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <div id="map" style="height: 220px; border-radius: 8px;"></div>
+        </div>
+        
+        <!-- Leaflet CSS/JS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        
+        <!-- SCRIPT DE LA MAP -->
+        <script>
+          const map = L.map('map').setView([48.8566, 2.3522], 15); // Paris
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors & CartoDB'
+          }).addTo(map);
+          L.marker([48.8566, 2.3522]).addTo(map).bindPopup('Your Digital Solutions<br>14, rue Charles V<br>75004 PARIS').openPopup();
+        </script> 
+
+
+ <!-- BOUTON DE PARTAGE AVEC ESPACE RÉDUIT -->
+<div class="flex justify-center mt-0">
+  <button class="button_share" id="btnShare">
+    <p class="button__text_share" style="--letters-count: 18;">
+      <span style="--index: 0;">P</span>
+      <span style="--index: 1;">A</span>
+      <span style="--index: 2;">R</span>
+      <span style="--index: 3;">T</span>
+      <span style="--index: 4;">A</span>
+      <span style="--index: 5;">G</span>
+      <span style="--index: 6;">E</span>
+      <span style="--index: 7;">R</span>
+      <span style="--index: 8;"> </span>
+      <span style="--index: 9;">P</span>
+      <span style="--index: 10;">A</span>
+      <span style="--index: 11;">R</span>
+      <span style="--index: 12;">T</span>
+      <span style="--index: 13;">A</span>
+      <span style="--index: 14;">G</span>
+      <span style="--index: 15;">E</span>
+      <span style="--index: 16;">R</span>
+      <span style="--index: 17;"> </span>
+    </p>
+
+    <div class="button__circle_share">
+      <!-- Icône Partage -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"
+           class="button__icon_share">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
       </svg>
-  
-      <!-- Icône Validé (vert, visible au hover) -->
-      <svg class="button__icon_share checked" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-           fill="none" stroke="#00ff00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-           style="position: absolute; transform: translate(-150%, 150%);">
-        <path d="M5 13l5 5L20 8" />
+
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"
+           class="button__icon_share button__icon_share--copy">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
       </svg>
     </div>
-  
-    <style>
-      @keyframes text-rotation {
-        to { transform: rotate(360deg); }
-      }
-    </style>
   </button>
+</div>
 
+<script>
+  const btnShare = document.getElementById('btnShare');
 
-
+  btnShare.addEventListener('click', async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          text: 'Regarde ce super site !',
+          url: window.location.href,
+        });
+        console.log('Partage réussi');
+      } catch (error) {
+        console.error('Erreur lors du partage:', error);
+      }
+    } else {
+      alert('Le partage n’est pas supporté sur ce navigateur.');
+    }
+  });
+</script>
 
   </div>
 
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <script>
+    let vantaEffect = null;
+    window.addEventListener('load', () => {
+      vantaEffect = VANTA.NET({
+        el: "#vanta-bg",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        color: 0x0099ff,
+        backgroundColor: 0x0d1e30,
+        maxDistance: 25.00,
+        spacing: 15.00,
+        showDots: true
+      });
+
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 1000);
+      }, 1500);
+    });
+  </script>
 </body>
 </html>
