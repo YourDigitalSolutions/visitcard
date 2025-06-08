@@ -153,7 +153,24 @@
         min-width: unset;
         padding: 8px 12px;
         font-size: 0.75rem;
-      }
+      }.flex.flex-row.gap-4.justify-center.w-full {
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center; /* bien centrer la colonne */
+  width: 100%;
+}
+.flex.flex-row.gap-4.justify-center.w-full a {
+  width: 100%;
+  max-width: 280px; /* limite largeur max des boutons */
+  min-width: unset;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  text-align: center; /* centre le texte et icône */
+  display: flex;
+  justify-content: center; /* centre horizontalement contenu des boutons */
+  align-items: center;
+}
     }
   </style>
 </head>
