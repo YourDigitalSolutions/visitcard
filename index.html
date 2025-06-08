@@ -250,15 +250,22 @@
   <div id="vanta-bg"></div>
 
   <div class="card">
+    <!-- BOUTON DE PARTAGE AVEC ESPACE RÉDUIT 
     <div class="top-banner">
       <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo" class="logo" />
+    </div>-->
+
+    <div class="profile-row flex items-center gap-4 px-6 mt-6" style="margin-top: 30px;">
+      <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Photo de profil" class="avatar" />
+      <div class="profile-text text-left" style="display: flex; flex-direction: column; justify-content: center;">
+        <img src="Logo_Y_blank.png" alt="Logo" style="width: 15%; height: auto; margin-bottom: 8px; display: block;" />
+        <h1>Jean Dupont</h1>
+        <p>Fondateur de Exemple SARL</p>
+      </div>
     </div>
+    
 
-    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Photo de profil" class="avatar" />
-    <h1>Jean Dupont</h1>
-    <p>Fondateur de Exemple SARL</p>
-
-    <div class="flex flex-row gap-4 px-6 mt-6 justify-center">
+    <div class="flex flex-row gap-4 px-6 mt-6 justify-center" style="margin-top: 0px;">
       <a href="contact.vcf" download class="flex justify-center gap-2 items-center mx-auto shadow-xl text-sm bg-gray-50 backdrop-blur-md font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-700 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-emerald-500 hover:text-gray-50 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-10 px-4 py-2 overflow-hidden border-2 rounded-full group">
         📇 Ajouter en contact
         <svg class="w-5 h-5 group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-gray-700 group-hover:border-none p-1 rotate-45" viewBox="0 0 16 19" xmlns="http://www.w3.org/2000/svg">
@@ -348,15 +355,15 @@
     
     
 
-      <div class="flex justify-center mt-6">
+      <div class="flex justify-center mt-6" style="margin-top: 20px;">
         <button onclick="window.open('web-flip_book-main/index.html', '_blank')" class="relative h-[50px] px-[30px] border-[2px] border-black bg-[#e8e8e8] select-none whitespace-nowrap transition-all duration-75 font-sans hover:cursor-crosshair active:scale-95 before:content-[''] before:absolute before:bg-[#e8e8e8] before:transition-all before:duration-200 before:w-[calc(100%+6px)] before:h-[calc(100%-16px)] before:top-[8px] before:left-[-3px] hover:before:top-[16px] hover:before:h-[calc(100%-32px)] after:content-[''] after:absolute after:bg-[#e8e8e8] after:transition-all after:duration-200 after:w-[calc(100%-16px)] after:h-[calc(100%+6px)] after:top-[-3px] after:left-[8px] hover:after:left-[16px] hover:after:w-[calc(100%-32px)]">
           <span class="relative z-[3] text-[15px] font-semibold">Découvrir Notre Histoire</span>
         </button>
       </div>
 
- <br>
+
       <!-- BOUTON 2 -->
-      <div>
+      <div style="margin-top: 20px;">
         <button class="learn-more group relative inline-block w-56" style="cursor: pointer; font-family: inherit; font-size: inherit;">
           <span class="circle block w-12 h-12 bg-[#282936] rounded-full relative transition-all duration-[450ms] ease-[cubic-bezier(0.65,0,0.076,1)] group-hover:w-full"></span>
           <span class="icon arrow absolute top-1/2 left-[10px] -translate-y-1/2 w-[18px] h-[2px] bg-none transition-all duration-[450ms] ease-[cubic-bezier(0.65,0,0.076,1)] group-hover:bg-white group-hover:translate-x-4">
@@ -368,93 +375,81 @@
         </button>
         </div>
 
-        <div class="social-icons">
+        <div class="social-icons" style="margin-top: 20px;">
           <a href="https://instagram.com/tonprofil" target="_blank" rel="noopener"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram" /></a>
           <a href="https://linkedin.com/in/tonprofil" target="_blank" rel="noopener"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" /></a>
           <a href="https://youtube.com/tonprofil" target="_blank" rel="noopener"><img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="YouTube" /></a>
           <a href="https://tiktok.com/@tonprofil" target="_blank" rel="noopener"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046123.png" alt="TikTok" /></a>
+        
+          
+        
         </div>
 
-        
+       
         <!-- Encadré avec plus d’espace intérieur et extérieur -->
-<div style="max-width: 360px; margin: 60px auto; padding: 24px; border: 1px solid #ccc; border-radius: 12px; background-color: #f9f9f9; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-  <div id="map" style="height: 220px; border-radius: 8px;"></div>
+        <div style="max-width: 360px; margin: 10px auto; padding: 24px; border: 1px solid #ccc; border-radius: 12px; background-color: #f9f9f9; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <div id="map" style="height: 220px; border-radius: 8px;"></div>
+        </div>
+        
+        <!-- Leaflet CSS/JS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        
+        <!-- SCRIPT DE LA MAP -->
+        <script>
+          const map = L.map('map').setView([48.8566, 2.3522], 15); // Paris
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors & CartoDB'
+          }).addTo(map);
+          L.marker([48.8566, 2.3522]).addTo(map).bindPopup('Your Digital Solutions<br>14, rue Charles V<br>75004 PARIS').openPopup();
+        </script> 
+
+<!-- BOUTON DE PARTAGE AVEC ESPACE RÉDUIT -->
+<div class="flex justify-center mt-0">
+  <button class="button_share">
+    <p class="button__text_share" style="--letters-count: 18;">
+      <span style="--index: 0;">P</span>
+      <span style="--index: 1;">A</span>
+      <span style="--index: 2;">R</span>
+      <span style="--index: 3;">T</span>
+      <span style="--index: 4;">A</span>
+      <span style="--index: 5;">G</span>
+      <span style="--index: 6;">E</span>
+      <span style="--index: 7;">R</span>
+      <span style="--index: 8;"> </span>
+      <span style="--index: 9;">P</span>
+      <span style="--index: 10;">A</span>
+      <span style="--index: 11;">R</span>
+      <span style="--index: 12;">T</span>
+      <span style="--index: 13;">A</span>
+      <span style="--index: 14;">G</span>
+      <span style="--index: 15;">E</span>
+      <span style="--index: 16;">R</span>
+      <span style="--index: 17;"> </span>
+    </p>
+
+    <div class="button__circle_share">
+      <!-- Icône Partage -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"
+           class="button__icon_share">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
+      </svg>
+
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"
+           class="button__icon_share button__icon_share--copy">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
+      </svg>
+    </div>
+  </button>
 </div>
-
-<!-- Leaflet CSS/JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<script>
-  const map = L.map('map').setView([48.8566, 2.3522], 15); // Paris
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors & CartoDB'
-  }).addTo(map);
-  L.marker([48.8566, 2.3522]).addTo(map).bindPopup('Your Digital Solutions<br>14, rue Charles V<br>75004 PARIS').openPopup();
-</script>
-
-  <div class="flex justify-center mt-6">
-    <button class="button_share">
-      <p class="button__text_share" style="--letters-count: 18;">
-        <span style="--index: 0;">P</span>
-        <span style="--index: 1;">A</span>
-        <span style="--index: 2;">R</span>
-        <span style="--index: 3;">T</span>
-        <span style="--index: 4;">A</span>
-        <span style="--index: 5;">G</span>
-        <span style="--index: 6;">E</span>
-        <span style="--index: 7;">R</span>
-        <span style="--index: 8;"> </span>
-        <span style="--index: 9;">P</span>
-        <span style="--index: 10;">A</span>
-        <span style="--index: 11;">R</span>
-        <span style="--index: 12;">T</span>
-        <span style="--index: 13;">A</span>
-        <span style="--index: 14;">G</span>
-        <span style="--index: 15;">E</span>
-        <span style="--index: 16;">R</span>
-        <span style="--index: 17;"> </span>
-      </p>
-  
-      <div class="button__circle_share">
-        <!-- Icône Partage -->
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="button__icon_share"
-        >
-          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-          <polyline points="16 6 12 2 8 6"></polyline>
-          <line x1="12" y1="2" x2="12" y2="15"></line>
-        </svg>
-  
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="button__icon_share button__icon_share--copy"
-        >
-          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-          <polyline points="16 6 12 2 8 6"></polyline>
-          <line x1="12" y1="2" x2="12" y2="15"></line>
-        </svg>
-      </div>
-    </button>    
-  </div>
-  
   
 
 
